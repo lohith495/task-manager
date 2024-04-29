@@ -13,10 +13,10 @@ To test the application, below are the api's and respective request body and exp
 
 2. GET /tasks/id
    example-
-   resource: /tasks/15
-   request body : not required
-   response status: 200 OK
-   response body:
+   | resource: /tasks/15
+   | request body : not required
+   | response status: 200 OK
+   | response body:
    [
     {
         "id": 15,
@@ -28,14 +28,14 @@ To test the application, below are the api's and respective request body and exp
 
 3. POST /tasks
    example-
-   request body:
+   | request body:
                {
                 "title": "Install Mongo",
                 "description": "Install Mongo",
                 "completed": false
               }
-   response status: 201
-   response body:
+   | response status: 201
+   | response body:
    {
     "title": "Install Mongo",
     "description": "Install Mongo",
@@ -45,15 +45,15 @@ To test the application, below are the api's and respective request body and exp
 
 4. PUT /tasks/id
    example -
-   resourec/uri: /tasks/16
-   request body:
+   | resourec/uri: /tasks/16
+   | request body:
                {                
                 "title": "Install Redis",
                 "description": "Install Redis",
                 "completed": true
             }
-   response status: 201
-   response body:
+   | response status: 201
+   | response body:
    {
     "title": "Install Redis",
     "description": "Install Redis",
@@ -63,7 +63,7 @@ To test the application, below are the api's and respective request body and exp
 
 5. DELETE /tasks/id
    example -
-   resource/uri: /tasks/16
-   request body: not required
-   response status: 200
-   response body: Task 16 Deleted successfully
+   | resource/uri: /tasks/16
+   | request body: not required
+   | response status: 200
+   | response body: Task 16 Deleted successfully
