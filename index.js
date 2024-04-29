@@ -8,11 +8,12 @@ tasksArray.push(tasksData);
 console.log(JSON. stringify(tasksArray, undefined, 4));
 
 app.use(express.json());
-app.listen(port, (err) => {
+const server = app.listen(port, (err) => {
     if(err){
         return console.log('error occured: '+err);
     }
     console.log('app is up and running on port: '+port);
+    console.log(server.address());
 });
 
 app.get('/tasks', (req, res) => {
@@ -49,19 +50,35 @@ app.post('/tasks', (req, res) => {
 app.put('/tasks/:id', (req, res) => {
     const updatedTask = req.body;
     console.log(updatedTask);
-    if(Validator.validateTaskInfo(updatedTask).status == true){
-        tasksArray[tasksArray.length-1].tasks[req.params.id-1].completed = updatedTask.completed;
-        console.log('Array after updation: '+JSON. stringify(tasksArray, undefined, 4));
-        console.log('Updated Entry: '+JSON. stringify(tasksArray[tasksArray.length-1].tasks[req.params.id-1], undefined, 4));
-        return res.status(201).json(tasksArray[0].tasks[req.params.id-1]);
+    let idTobeUpdated = req.params.id-1;
+    if((tasksArray.length !== 0) && idTobeUpdated <= tasksArray[tasksArray.length-1].tasks.length-1){
+        if(Validator.validateTaskInfo(updatedTask).status == true){
+            tasksArray[tasksArray.length-1].tasks[req.params.id-1].completed = updatedTask.completed;
+            tasksArray[tasksArray.length-1].tasks[req.params.id-1].title = updatedTask.title;
+            tasksArray[tasksArray.length-1].tasks[req.params.id-1].description = updatedTask.description;
+            console.log('Array after updation: '+JSON. stringify(tasksArray, undefined, 4));
+            console.log('Updated Entry: '+JSON. stringify(tasksArray[tasksArray.length-1].tasks[req.params.id-1], undefined, 4));
+            return res.status(201).json(tasksArray[0].tasks[req.params.id-1]);
+        }
+        else{
+            return res.status(400).json(Validator.validateTaskInfo(updatedTask).message);
+        }
     }
     else{
-        return res.status(400).json(Validator.validateTaskInfo(updatedTask).message);
+        return res.status(404).json('No task found to update');
     }
 });
 
 app.delete('/tasks/:id', (req, res) => {
-    tasksArray[tasksArray.length-1].tasks.splice(req.params.id-1,1);
-    console.log('Array after deletion: '+JSON. stringify(tasksArray, undefined, 4));
-    return res.status(200).send('Task '+req.params.id+' Deleted successfully');
+    let idTobeDeleted = req.params.id;
+    if((tasksArray.length !== 0) && idTobeDeleted <= tasksArray[tasksArray.length-1].tasks.length){
+        let deletedArray = tasksArray[tasksArray.length-1].tasks.splice(req.params.id-1,1);
+        console.log('Array after deletion: '+JSON. stringify(tasksArray, undefined, 4));
+        return res.status(200).send('Task '+req.params.id+' Deleted successfully');
+    }
+    else{
+        return res.status(404).json('No task found to delete');
+    }
 });
+
+module.exports = server
